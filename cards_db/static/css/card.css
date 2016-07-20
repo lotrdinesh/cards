@@ -1,0 +1,16 @@
+.wrapper{
+width:50%;
+}
+
+table, tbody{
+    border: 1px solid black;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius : 20px;
+	}
+
+
+
+
+
+

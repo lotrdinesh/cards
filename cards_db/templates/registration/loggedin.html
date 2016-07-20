@@ -1,0 +1,17 @@
+{% extends "registration/base.html" %}
+
+{% block login %}
+		<p style="float:right">
+		{% if user.is_authenticated %}
+		Click here to <a href="/accounts/logout">Logout</a>
+		{% else %}
+		Click here to <a href="/accounts/login">Login</a>/<a href="/accounts/register">Register</a>
+		{% endif %}
+		</p>
+{% endblock %}
+
+{% block content %}
+
+	<h2> Hi {{ user.username }}, You are logged in! </h2>
+	 
+{% endblock %} 

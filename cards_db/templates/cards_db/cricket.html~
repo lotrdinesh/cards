@@ -1,0 +1,31 @@
+{% extends 'cards_db/base.html' %}
+{% load staticfiles %}
+
+{%  block scripts %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/tables_cric.css' %}">
+{% endblock %}
+
+{% block login %}
+		<p style="float:right">
+		{% if user.is_authenticated %}
+		Click here to <a href="/accounts/logout">Logout</a>
+		{% else %}
+		Click here to <a href="/accounts/login">Login</a>/<a href="/accounts/register">Register</a>
+		{% endif %}
+		</p>
+{% endblock %}
+
+{% block content %}
+
+<div id="pricing-table" class="clear">
+    <div class="plan">
+        <h3>Tests<span id="test"></span></h3>
+        <a class="signup" href="{%url 'tests' %}">Play</a>         
+    </div>
+    <div class="plan" style = "float:right">
+        <h3>One Days<span id="one_day"></span></h3>
+        <a class="signup" href="{%url 'oneday' %}">Play</a>        
+    </div>
+     	
+</div>
+{% endblock %}

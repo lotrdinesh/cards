@@ -1,0 +1,77 @@
+#clockdiv{
+    font-family: sans-serif;
+    color: #fff;
+    font-weight: 100;
+    text-align: center;
+    font-size: 30px;
+    
+}
+
+#clockdiv > div{
+    padding: 10px;
+    border-radius: 3px;
+    background: #E6E6FA;
+    display: inline-block;
+}
+
+#clockdiv div > span{
+    padding: 15px;
+    border-radius: 3px;
+    background: #191970;
+    display: inline-block;
+}
+
+.smalltext{
+    padding-top: 5px;
+    font-size: 16px;
+}
+
+
+
+table, tbody{
+    border: 1px solid black;
+    border-radius : 20px;
+    border-collapse: separate;
+    webkit-border-radius : 20px; 
+
+}
+
+.table{
+width:40%;
+position: relative;
+top:70px;
+}
+
+.left{
+float: left;
+}
+
+.right{
+float: right;
+}
+.wrapper{
+width:100%;
+display:inline;
+}
+
+.modal{
+text-align: center;
+}
+
+
+@media screen and (min-width: 768px) { 
+  .modal:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: " ";
+    height: 100%;
+  }
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+
+

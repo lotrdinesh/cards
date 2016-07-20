@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<p> Registration Form to be submitted here
+
+{% endblock %}

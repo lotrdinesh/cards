@@ -1,0 +1,41 @@
+{% extends "registration/base.html" %}
+
+{% block login %}
+		<p style="float:right">
+		{% if user.is_authenticated %}
+		Click here to <a href="/accounts/logout">Logout</a>
+		{% else %}
+		Click here to <a href="/accounts/login">Login</a>/<a href="/accounts/register">Register</a>
+		{% endif %}
+		</p>
+{% endblock %}
+
+{% block content %}
+<div id="container_demo" >
+                    <!-- hidden anchor to stop jump http://www.css3create.com/Astuce-Empecher-le-scroll-avec-l-utilisation-de-target#wrap4  -->
+                    <div id="wrapper">
+                        <div id="login" class="animate form">
+                            <form  method="post" action="{% url 'django.contrib.auth.views.login' %}>
+				{% csrf_token %} 
+                                <h1>Log in</h1> 
+                                <p> 
+                                    <label for="username" class="uname"> Your email or username </label>
+                                    <input id="username" name="username" required="required" type="text" placeholder="username"/>
+                                </p>
+                                <p> 
+                                    <label for="password" class="youpasswd"> Your password </label>
+                                    <input id="password" name="password" required="required" type="password" placeholder="eg. X8df!90EO" /> 
+                                </p>
+                                <p class="login button"> 
+                                    <input type="submit" value="Login" /> 
+								</p>
+                                <p class="change_link">Not a member yet ? 
+				<a href="/accounts/register" class="to_register">Join us</a>
+				</p>
+                            </form>
+                        </div>
+		    </div>
+</div>
+{% endblock %}
+
+

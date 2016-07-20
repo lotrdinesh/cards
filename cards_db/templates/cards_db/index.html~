@@ -1,0 +1,14 @@
+{% extends 'cards_db/base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+		<div id="tagline">
+			<h1>Cricket Cards</h1>
+			<p>
+				From Our Childhood
+			</p>
+		</div>
+		<img src="{% static 'images/test_cricket.jpg' %}" alt="test cricket image" class="figure">
+{% endblock %}	
+
+

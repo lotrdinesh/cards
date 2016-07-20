@@ -1,0 +1,38 @@
+$(document).ready(function(){
+$.getTimeRemaining = function(endtime) {
+  var t = Date.parse(endtime) - Date.parse(new Date());
+  var seconds = Math.floor((t / 1000) % 60);
+  return {
+    'total': t,
+    'seconds': seconds
+  };
+}
+
+
+$.fn.initializeClock =function (endtime) {
+  var secondsSpan = $('.seconds');
+  $.updateClock = function() {
+    var t = $.getTimeRemaining(endtime);
+    secondsSpan.html(t.seconds);
+
+    if (t.total <= 0) {
+      clearInterval(timeinterval);
+      $.removeCookie("myClock", { path: '/', expires:5 });
+	}
+}
+  $.updateClock();
+  var timeinterval = setInterval($.updateClock, 1000);
+}
+
+
+if($.cookie("myClock") != null){
+  var deadline = $.cookie("myClock");
+
+}
+else{
+var deadline = new Date(Date.parse(new Date()) + 15 * 1000);
+$.cookie("myClock",deadline, {path: "/", expires: 5}) ;
+console.log($.cookie("myClock"));
+}
+$('#clockdiv').initializeClock(deadline);	
+})	

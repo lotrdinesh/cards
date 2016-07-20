@@ -1,0 +1,123 @@
+{% extends 'cards_db/base.html' %}
+{% load staticfiles %}
+
+{% block scripts %}
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="{%static 'js/card.js' %}"> </script>
+<script src="{%static 'js/deadline.js' %}"> </script>
+<script src="{%static 'js/ajax_submit.js' %}"> </script>
+<link rel="stylesheet" href="{% static 'css/card_game.css' %}">
+{% endblock %}	
+ 
+{% block login %}
+		<p style="float:right">
+		{% if user.is_authenticated %}
+		Click here to <a href="/accounts/logout">Logout</a>
+		{% else %}
+		Click here to <a href="/accounts/login">Login</a>/<a href="/accounts/register">Register</a>
+		{% endif %}
+		</p>
+{% endblock %}
+
+{% block content %}
+
+<div id="clockdiv" class="center-block">
+  <div>
+    <span class="seconds"></span>
+    <div class="smalltext">Seconds</div>
+  </div>
+</div>
+
+<div class="wrapper">
+<table class="table left">
+<tbody>
+{% csrf_token %}
+<tr>
+<td rowspan = 4><img src={% with  'images/'|add:player.name|add:'.jpg' as image_static %}{%static image_static %}{% endwith %} style = "padding: 5px" border-radius:20px> 
+<p align = "center">{{ player.name }} </p>
+</td>
+
+<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Matches: {{ player.test_matches }} </button> </td>
+</tr>
+<tr>
+<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Runs: {{ player.test_runs }} </button></td>
+</tr>
+<tr>
+<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Avg: {{ player.test_bat_average }} </button></td>
+</tr>
+<tr>
+<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Highest Score:{{ player.test_highest_score }} </button></td>
+</tr>
+<tr>
+<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 100s:{{ player.test_hundreds }} </button>  </td>
+<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 50s: {{ player.test_fifties }}  </button></td>
+</tr>
+<tr>
+<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Wickets: {{ player.test_wickets }} </button>  </td>
+<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> BBM: {{ player.test_bbm_wkts }}/{{ player.test_bbm_runs }}  </button></td>
+</tr>
+<tr>
+<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Economy: {{ player.test_econ_rate }} </button>  </td>
+<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 5W: {{ player.test_no_of_five_wickets }} </button></td>
+</tr>
+</tbody>
+</table>
+
+<table class="table right">
+<tbody>
+<tr>
+<td rowspan = 4>  <img src={% with  'images/'|add:player.name|add:'.jpg' as image_static %}{%static image_static %}{% endwith %} style = "padding: 5px" border-radius:20px id="image"> 
+<p align = "center" id="name"> {{ player.name }} </p>
+</td>
+<td><button type="button" id="Matches" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Matches: {{ player.test_matches }} </button> </td>
+</tr>
+<tr>
+<td><button type="button" id="Runs" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Runs: {{ player.test_runs }} </button></td>
+</tr>
+<tr>
+<td><button type="button" id="Avg" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Avg: {{ player.test_bat_average }} </button></td>
+</tr>
+<tr>
+<td><button type="button" id="Highest" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Highest Score: {{ player.test_highest_score }} </button></td>
+</tr>
+<tr>
+<td><button type="button" id="100s" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 100s: {{ player.test_hundreds }} </button>  </td>
+<td><button type="button" id="50s" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 50s: {{ player.test_fifties }} </button></td>
+</tr>
+<tr>
+<td><button type="button" id="Wickets" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Wickets: {{ player.test_wickets }} </button>  </td>
+<td><button type="button" id="BBM" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> BBM: {{ player.test_bbm_wkts }}/{{ player.test_bbm_runs }} </button></td>
+</tr>
+<tr>
+<td><button type="button" id="Economy" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Economy: {{ player.test_econ_rate }} </button>  </td>
+<td><button type="button" id="5W" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 5W:{{ player.test_no_of_five_wickets }} </button></td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <p>Some text in the modal.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+{% endblock %}
