@@ -21,9 +21,9 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/', include('registration.backends.hmac.urls')),
     url(r'^accounts/login/$', auth.views.login, name='login'),
-    url(r'^accounts/logout/$', auth.views.logout, name='logout'),
-    url(r'^accounts/loggedin/$', views.loggedin, name='loggedin'),
-    url(r'^accounts/', include('registration.backends.hmac.urls')),
+    url(r'^logout/$', views.logout_view, name='logout'),
+    url(r'^account/', include('login_register.urls')),
     url(r'', include('cards_db.urls')),
-
 ]
+
+

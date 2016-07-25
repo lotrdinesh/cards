@@ -12,9 +12,9 @@
 {% block login %}
 		<p style="float:right">
 		{% if user.is_authenticated %}
-		Click here to <a href="/accounts/logout">Logout</a>
+		Click here to <a href="{% url 'logout' %}">Logout</a>
 		{% else %}
-		Click here to <a href="/accounts/login">Login</a>/<a href="/accounts/register">Register</a>
+		Click here to <a href="{% url 'login' %}">Login</a>/<a href="/accounts/register">Register</a>
 		{% endif %}
 		</p>
 {% endblock %}
@@ -33,11 +33,11 @@
 <tbody>
 {% csrf_token %}
 <tr>
-<td rowspan = 4> <img src={% with  'images/'|add:player.name|add:'.jpg' as image_static %}{%static image_static %}{% endwith %} style = "padding: 5px" border-radius:20px> 
+<td rowspan = 4><img src={% with  'images/'|add:player.name|add:'.jpg' as image_static %}{%static image_static %}{% endwith %} style = "padding: 5px" border-radius:20px> 
 <p align = "center">{{ player.name }} </p>
 </td>
 
-<td><button type="button" id=Matches class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Matches: {{ player.test_matches }} </button> </td>
+<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Matches: {{ player.test_matches }} </button> </td>
 </tr>
 <tr>
 <td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Runs: {{ player.test_runs }} </button></td>
@@ -66,31 +66,31 @@
 <table class="table right">
 <tbody>
 <tr>
-<td rowspan = 4>  <img src={% with  'images/'|add:player.name|add:'.jpg' as image_static %}{%static image_static %}{% endwith %} style = "padding: 5px" border-radius:20px> 
-<p align = "center"> {{ player.name }} </p>
+<td rowspan = 4>  <img src={% with  'images/'|add:player.name|add:'.jpg' as image_static %}{%static image_static %}{% endwith %} style = "padding: 5px" border-radius:20px id="image"> 
+<p align = "center" id="name"> {{ player.name }} </p>
 </td>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Matches: {{ player.test_matches }} </button> </td>
+<td><button type="button" id="Matches" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Matches: {{ player.test_matches }} </button> </td>
 </tr>
 <tr>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Runs: {{ player.test_runs }} </button></td>
+<td><button type="button" id="Runs" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Runs: {{ player.test_runs }} </button></td>
 </tr>
 <tr>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Avg: {{ player.test_bat_average }} </button></td>
+<td><button type="button" id="Avg" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Avg: {{ player.test_bat_average }} </button></td>
 </tr>
 <tr>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Highest Score: {{ player.test_highest_score }} </button></td>
+<td><button type="button" id="Highest" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Highest Score: {{ player.test_highest_score }} </button></td>
 </tr>
 <tr>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 100s: {{ player.test_hundreds }} </button>  </td>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 50s: {{ player.test_fifties }} </button></td>
+<td><button type="button" id="100s" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 100s: {{ player.test_hundreds }} </button>  </td>
+<td><button type="button" id="50s" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 50s: {{ player.test_fifties }} </button></td>
 </tr>
 <tr>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Wickets: {{ player.test_wickets }} </button>  </td>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> BBM: {{ player.test_bbm_wkts }}/{{ player.test_bbm_runs }} </button></td>
+<td><button type="button" id="Wickets" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Wickets: {{ player.test_wickets }} </button>  </td>
+<td><button type="button" id="BBM" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> BBM: {{ player.test_bbm_wkts }}/{{ player.test_bbm_runs }} </button></td>
 </tr>
 <tr>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Economy: {{ player.test_econ_rate }} </button>  </td>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 5W:{{ player.test_no_of_five_wickets }} </button></td>
+<td><button type="button" id="Economy" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Economy: {{ player.test_econ_rate }} </button>  </td>
+<td><button type="button" id="5W" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 5W:{{ player.test_no_of_five_wickets }} </button></td>
 </tr>
 </tbody>
 </table>

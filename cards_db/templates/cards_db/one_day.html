@@ -11,9 +11,9 @@
 {% block login %}
 		<p style="float:right">
 		{% if user.is_authenticated %}
-		Click here to <a href="/accounts/logout">Logout</a>
+		Click here to <a href="{% url 'logout' %}">Logout</a>
 		{% else %}
-		Click here to <a href="/accounts/login">Login</a>/<a href="/accounts/register">Register</a>
+		Click here to <a href="{% url 'login' %}">Login</a>/<a href="/accounts/register">Register</a>
 		{% endif %}
 		</p>
 {% endblock %}

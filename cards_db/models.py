@@ -78,14 +78,4 @@ class Tests(models.Model):
     class Meta:
         db_table = 'tests'
 
-class Room(models.Model):
-    roomid = models.IntegerField()
-    player1_name = models.CharField(max_length=50)
-    player2_name = models.CharField(max_length=50)
-    player1_score = models.IntegerField(blank= True, null= True)
-    player2_score = models.IntegerField(blank= True, null= True)	
-    
-    def __str__(self):
-	return self.roomid
 
- 

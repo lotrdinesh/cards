@@ -11,7 +11,7 @@
 {% block login %}
 		<p style="float:right">
 		{% if user.is_authenticated %}
-		Click here to <a href="/accounts/logout">Logout</a>
+		Click here to <a href="{% url 'logout' %}">Logout</a>
 		{% else %}
 		Click here to <a href="/accounts/login">Login</a>/<a href="/accounts/register">Register</a>
 		{% endif %}
@@ -27,7 +27,7 @@
 </div>
 
 <div class="wrapper">
-<table class="table">
+<table class="table left">
 <tbody>
 <tr>
 <td rowspan = 4>  <img src={% with  'images/'|add:player.name|add:'.jpg' as image_static %}{%static image_static %}{% endwith %} style = "padding: 5px" border-radius:20px> 
@@ -59,7 +59,7 @@
 </tbody>
 </table>
 
-<table class="table">
+<table class="table right">
 <tbody>
 <tr>
 <td rowspan = 4>  <img src={% with  'images/'|add:player.name|add:'.jpg' as image_static %}{%static image_static %}{% endwith %} style = "padding: 5px" border-radius:20px> 

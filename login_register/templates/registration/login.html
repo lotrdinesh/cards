@@ -1,11 +1,11 @@
-{% extends "registration/base.html" %}
+{% extends "cards_db/base.html" %}
 
 {% block login %}
 		<p style="float:right">
 		{% if user.is_authenticated %}
-		Click here to <a href="/accounts/logout">Logout</a>
+		Click here to <a href="{% url 'logout' %}">Logout</a>
 		{% else %}
-		Click here to <a href="/accounts/login">Login</a>/<a href="/accounts/register">Register</a>
+		Click here to <a href="{% url 'login' %}">Login</a>/<a href="/accounts/register">Register</a>
 		{% endif %}
 		</p>
 {% endblock %}
@@ -15,7 +15,7 @@
                     <!-- hidden anchor to stop jump http://www.css3create.com/Astuce-Empecher-le-scroll-avec-l-utilisation-de-target#wrap4  -->
                     <div id="wrapper">
                         <div id="login" class="animate form">
-                            <form  method="post" action="{% url 'django.contrib.auth.views.login' %}>
+                            <form  method="post" action="{% url 'django.contrib.auth.views.login' %}">
 				{% csrf_token %} 
                                 <h1>Log in</h1> 
                                 <p> 

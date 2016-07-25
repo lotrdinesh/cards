@@ -4,3 +4,4 @@ from .models import Tests, OneDay
 
 admin.site.register(Tests)
 admin.site.register(OneDay)
+

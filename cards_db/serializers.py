@@ -14,3 +14,5 @@ class Tests_Serializer(serializers.ModelSerializer):
     class Meta:
 	model = Tests
 	fields = ('id', 'name','age', 'team', 'test_matches', 'test_not_outs', 'test_runs', 'test_highest_score', 'test_bat_average', 'test_bat_str_rate', 'test_hundreds','test_fifties','test_fours','test_sixes','test_balls', 'test_runs_against', 'test_wickets', 'test_bbm_wkts', 'test_bbm_runs', 'test_bowl_average', 'test_econ_rate', 'test_bowl_str_rate', 'test_no_of_five_wickets')
+
+

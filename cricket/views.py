@@ -1,10 +1,9 @@
-from django.shortcuts import render_to_response
-from django.http import HttpResponseRedirect
-from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import render
+from django.contrib.auth import logout, authenticate, login
 from django.template.context_processors import csrf
+from login_register.models import LoggedInUsers 
 
-
-def loggedin(request):
-    user=request.user	
-    return render_to_response('registration/loggedin.html', {'user': user})
-
+def logout_view(request):
+    logout(request)
+    return render(request, 'cards_db/index.html')
+ 
