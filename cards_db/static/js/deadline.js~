@@ -32,7 +32,6 @@ if($.cookie("myClock") != null){
 else{
 var deadline = new Date(Date.parse(new Date()) + 15 * 1000);
 $.cookie("myClock",deadline, {path: "/", expires: 5}) ;
-console.log($.cookie("myClock"));
 }
 $('#clockdiv').initializeClock(deadline);	
 })	

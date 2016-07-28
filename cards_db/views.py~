@@ -5,9 +5,10 @@ from rest_framework import viewsets, response
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-import random
+import random, haikunator
 from rest_framework.renderers import JSONRenderer
 from Room.models import Gameroom, Message
+from django.db import transaction
 
 
 # Create your views here.
@@ -19,8 +20,22 @@ def cricket(request):
     return render(request, 'cards_db/cricket.html')    
 
 @login_required
-def tests(request):
-  
+def tests_enter(request):
+    try:
+	if ('label' in request.COOKIES):
+	    room = Gameroom.objects.get (label = request.COOKIES['label'])
+    	else:
+	    record = Message.objects.filter(user_two = "")
+	    if (record.count() != 0):
+	        record.user_two = request.user.username
+		room = record.Gameroom
+	    else:
+		room=new_room()                
+		message = Message.objects.create( Gameroom=room, handle ='game', user_one = request.user.username, max_cards = 5, type_of_game = 'tests', player_one_turn=True, player_two_turn=False, player_one = 'noimage')    
+    except Gameroom.DoesNotExist:
+	log.debug("Already playing an existing game in another room")	
+    return redirect(tests, label=room.label)	  
+
 '''
     if request.method == 'POST':
 	if request.is_ajax():
@@ -38,12 +53,21 @@ def tests(request):
     resp.set_cookie('test_player_name', player.name)    
     return resp
  '''  
-    
-
-
-
-
+@login_required    
+def tests(request, label):
+    room, created = Gameroom.objects.get_or_create(label = label)
+    messages = room.messages.all()[0]
+    print label
+    response = render(request, "cards_db/tests.html", {'room': room, 'messages':messages,})
+    response.set_cookie('label', room.label)
+    return response
   
+
+
+
+
+
+
 @login_required
 def oneday(request):
     if 'oneday_player_name' in request.COOKIES:
@@ -63,3 +87,16 @@ class Tests_ViewSet(viewsets.ModelViewSet):
 class OneDay_ViewSet(viewsets.ModelViewSet):
     queryset = OneDay.objects.all()
     serializer_class = OneDay_Serializer
+
+
+def new_room():
+    new_room = None
+    while not new_room:
+    	with transaction.atomic():
+       	    label = haikunator.Haikunator().haikunate()
+            if Gameroom.objects.filter(label=label).exists():
+                continue
+            new_room = Gameroom.objects.create(label=label)
+	
+    new_room.name = 'Room-' + str(Gameroom.objects.get(label = label).id)
+    return new_room

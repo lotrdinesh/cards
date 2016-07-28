@@ -28,7 +28,7 @@ class Message(models.Model):
     handle = models.TextField()
     user_one = models.TextField()
     user_two = models.TextField(blank=True, null=True)
-    player_one = models.TextField()
+    player_one = models.TextField(blank=True, null=True)
     player_two = models.TextField(blank=True, null=True) 
     user_one_score = models.IntegerField(default = 0)
     user_two_score = models.IntegerField(default = 0)

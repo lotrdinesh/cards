@@ -36,12 +36,12 @@ def logged_in(sender, user, request, **kwargs):
     loggedinuser = LoggedInUsers(username =user.username)
     loggedinuser.save()
 
-user_logged_in.connect(logged_in)
+
 
 def logged_out(sender, user, request, **kwargs):
     loggedoutuser = LoggedInUsers.objects.get(username =user.username)
     loggedoutuser.delete()
 	
-user_logged_out.connect(logged_out)
+
 
 

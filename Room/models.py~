@@ -18,8 +18,9 @@ class Gameroom(models.Model):
                 label = haikunator.Haikunator().haikunate()
             	if Gameroom.objects.filter(label=label).exists():
                     continue
-        new_room = Gameroom.objects.create(label=label)
-	new_room.name = 'Room' + Gameroom.objects.get(label = label).id
+            new_room = Gameroom.objects.create(label=label)
+	
+   	new_room.name = 'Room' + Gameroom.objects.get(label = label).id
 	return new_room
 
 class Message(models.Model):

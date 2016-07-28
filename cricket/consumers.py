@@ -4,7 +4,7 @@ import logging
 from channels import Group
 from channels.sessions import channel_session
 from Room.models import Gameroom, Message
-from cards_db.models import Tests, Oneday
+'from cards_db.models import Tests, Oneday
 
 log = logging.getLogger(__name__)
 
@@ -14,7 +14,7 @@ def ws_connect(message):
     # form /chat/{label}/, and finds a Room if the message path is applicable,
     # and if the Room exists. Otherwise, bails (meaning this is a some othersort
     # of websocket). So, this is effectively a version of _get_object_or_404.
-    if  
+    pass  
 '''   try:
         prefix, label = message['path'].decode('ascii').strip('/').split('/')
         if prefix != 'chat':
@@ -39,7 +39,8 @@ def ws_connect(message):
 '''
 @channel_session
 def ws_receive(message):
-    # Look up the room from the channel session, bailing if it doesn't exist
+    pass
+'''    # Look up the room from the channel session, bailing if it doesn't exist
     try:
         label = message.channel_session['room']
         room = Room.objects.get(label=label)
@@ -69,12 +70,12 @@ def ws_receive(message):
 
         # See above for the note about Group
         Group('chat-'+label, channel_layer=message.channel_layer).send({'text': json.dumps(m.as_dict())})
-
+'''
 @channel_session
 def ws_disconnect(message):
-    try:
+    '''try:
         label = message.channel_session['room']
         room = Room.objects.get(label=label)
         Group('chat-'+label, channel_layer=message.channel_layer).discard(message.reply_channel)
-    except (KeyError, Room.DoesNotExist):
-        pass
+    except (KeyError, Room.DoesNotExist):'''
+   pass
