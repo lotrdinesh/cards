@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.utils import timezone
+
+
 # Create your models here.
 
 class Gameroom(models.Model):
@@ -37,11 +39,12 @@ class Message(models.Model):
     player_one_turn = models.BooleanField()
     player_two_turn = models.BooleanField()
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
-    '''
+    
     def __str__(self):
-    	return '[{timestamp}] {handle}: {message}'.format(**self.as_dict())
-   
-    def as_dict(self):
-        return {'handle': self.handle, 'message': self.message, 'timestamp': self.formatted_timestamp}
-    '''
+    	return "[%s] %s: %s/%s" %(self.timestamp, self.type_of_game, self.user_one, self.user_two)
+    
+
+	     
+	
+    
 

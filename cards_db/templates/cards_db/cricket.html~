@@ -10,21 +10,59 @@
 		{% if user.is_authenticated %}
 		Click here to <a href="{% url 'logout' %}">Logout</a>
 		{% else %}
-		Click here to <a href="/accounts/login">Login</a>/<a href="/accounts/register">Register</a>
+		Click here to <a href="{% url 'login' %}">Login</a>/<a href="/accounts/register">Register</a>
 		{% endif %}
 		</p>
 {% endblock %}
 
 {% block content %}
 
+<div id="tests_Modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Searching for other players in Tests...</h4>
+      </div>
+      <div class="modal-body">
+        <p>Looking for players for a game</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Abort</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div id="oneday_Modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Searching for other players in OneDay...</h4>
+      </div>
+      <div class="modal-body">
+        <p>Looking for players for a game</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Abort</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <div id="pricing-table" class="clear">
     <div class="plan">
         <h3>Tests<span id="test"></span></h3>
-        <a class="signup" href="{%url 'tests' %}">Play</a>         
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#tests_Modal" onclick = {% url 'tests' %}> Play </button>         
     </div>
     <div class="plan">
         <h3>One Days<span id="one_day"></span></h3>
-        <a class="signup" href="{%url 'oneday' %}">Play</a>        
+	<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#oneday_Modal" onclick = {% url 'tests' %}> Play </button>
     </div>
      	
 </div>

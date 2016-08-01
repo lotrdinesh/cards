@@ -9,9 +9,10 @@ import random, haikunator
 from rest_framework.renderers import JSONRenderer
 from Room.models import Gameroom, Message
 from django.db import transaction
-
+import logging
 
 # Create your views here.
+log = logging.getLogger(__name__)
 
 def index(request):
     return render(request, 'cards_db/index.html')
@@ -31,9 +32,10 @@ def tests_enter(request):
 		room = record.Gameroom
 	    else:
 		room=new_room()                
-		message = Message.objects.create( Gameroom=room, handle ='game', user_one = request.user.username, max_cards = 5, type_of_game = 'tests', player_one_turn=True, player_two_turn=False, player_one = 'noimage')    
+		message = Message.objects.create( Gameroom=room, handle ='start', user_one = request.user.username, max_cards = 5, type_of_game = 'tests', player_one_turn=True, player_two_turn=False, player_one = 'noimage')    
     except Gameroom.DoesNotExist:
 	log.debug("Already playing an existing game in another room")	
+     
     return redirect(tests, label=room.label)	  
 
 '''
@@ -87,6 +89,7 @@ class Tests_ViewSet(viewsets.ModelViewSet):
 class OneDay_ViewSet(viewsets.ModelViewSet):
     queryset = OneDay.objects.all()
     serializer_class = OneDay_Serializer
+
 
 
 def new_room():

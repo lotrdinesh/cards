@@ -31,9 +31,10 @@ def tests_enter(request):
 		room = record.Gameroom
 	    else:
 		room=new_room()                
-		message = Message.objects.create( Gameroom=room, handle ='game', user_one = request.user.username, max_cards = 5, type_of_game = 'tests', player_one_turn=True, player_two_turn=False, player_one = 'noimage')    
+		message = Message.objects.create( Gameroom=room, handle ='start', user_one = request.user.username, max_cards = 5, type_of_game = 'tests', player_one_turn=True, player_two_turn=False, player_one = 'noimage')    
     except Gameroom.DoesNotExist:
 	log.debug("Already playing an existing game in another room")	
+     
     return redirect(tests, label=room.label)	  
 
 '''
@@ -57,7 +58,7 @@ def tests_enter(request):
 def tests(request, label):
     room, created = Gameroom.objects.get_or_create(label = label)
     messages = room.messages.all()[0]
-    print label
+    print room.label
     response = render(request, "cards_db/tests.html", {'room': room, 'messages':messages,})
     response.set_cookie('label', room.label)
     return response
@@ -87,6 +88,7 @@ class Tests_ViewSet(viewsets.ModelViewSet):
 class OneDay_ViewSet(viewsets.ModelViewSet):
     queryset = OneDay.objects.all()
     serializer_class = OneDay_Serializer
+
 
 
 def new_room():

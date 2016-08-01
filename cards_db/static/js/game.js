@@ -5,7 +5,13 @@ $(function() {
     
     gamesock.onmessage = function(message) {
         var data = JSON.parse(message.data);
-        
+	handle = data['handle']        
+	switch(handle) {
+	case 'start':
+            console.log(data);	    
+	    $('#searchModal').modal('hide');
+	    break;	
+	}
     };
 
     $("#chatform").on("submit", function(event) {
@@ -18,15 +24,7 @@ $(function() {
         $("#message").val('').focus();
         return false;
     });
-});
-
-$(function(){
-    $('#searchModal').on('hide.bs.modal', function(){
-        var searchModal = $(this);
-        var message = {
-            handle: 'abort',
-        }
-	gamesock.send(JSON.stringify(message));
 
 });
+
 
