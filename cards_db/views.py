@@ -25,14 +25,17 @@ def tests_enter(request):
     try:
 	if ('label' in request.COOKIES):
 	    room = Gameroom.objects.get (label = request.COOKIES['label'])
+	    
     	else:
-	    record = Message.objects.filter(user_two = "")
-	    if (record.count() != 0):
-	        record.user_two = request.user.username
+	    record_counts = Message.objects.filter(user_two = None).count()
+	    if (record_counts != 0):
+	        record = Message.objects.filter(user_two = None)[0]
+		record.user_two = request.user.username
+		record.save()
 		room = record.Gameroom
 	    else:
 		room=new_room()                
-		message = Message.objects.create( Gameroom=room, handle ='start', user_one = request.user.username, max_cards = 5, type_of_game = 'tests', player_one_turn=True, player_two_turn=False, player_one = 'noimage')    
+		message = Message.objects.create( Gameroom=room, handle ='start', user_one = request.user.username, max_cards = 5, type_of_game = 'tests', player_one_turn=True, player_two_turn=False)    
     except Gameroom.DoesNotExist:
 	log.debug("Already playing an existing game in another room")	
      

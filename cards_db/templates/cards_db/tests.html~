@@ -1,11 +1,13 @@
 {% extends 'cards_db/base.html' %}
 {% load staticfiles %}
+{% load card_tags %}
 
 {% block scripts %}
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 <script src="{%static 'js/card.js' %}"> </script>
 <script src="{%static 'js/deadline.js' %}"> </script>
 <script src="{%static 'js/ajax_submit.js' %}"> </script>
+<script src="{%static 'js/reconnecting-websocket.min.js' %}"> </script>
 <script src="{%static 'js/game.js' %}"> </script>
 <link rel="stylesheet" href="{% static 'css/card_game.css' %}">
 {% endblock %}	
@@ -22,7 +24,7 @@
 
 {% block content %}
 
-{% if not messages.user_two %}
+
 
 <div id="searchModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
@@ -43,7 +45,7 @@
   </div>
 </div>
 
-{% else %}
+
 
 <!-- Modal -->
 <div id="myModal" class="modal fade" role="dialog">
@@ -77,70 +79,35 @@
 <tbody>
 {% csrf_token %}
 <tr>
-<td rowspan = 4><img src= "{% static 'images/noimage.jpg' %}"style = "padding: 5px" border-radius:20px> 
-<p align = "center">{{ messages.user_two }} </p>
+<td rowspan = 4><img src= {% static player_one.name|get_image%} style = "padding: 5px" border-radius:20px> 
+<p align = "center">{{ player_one.name }} </p>
 </td>
 
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Matches: {{ messages.player_one }} </button> </td>
+<td><button type="button" id="test_matches" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Matches: {{ player_one.test_matches }} </button> </td>
 </tr>
 <tr>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Runs: {{ messages.player_one }} </button></td>
+<td><button type="button" id="test_runs" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Runs: {{ player_one.test_runs }} </button></td>
 </tr>
 <tr>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Avg: {{ messages.player_one }} </button></td>
+<td><button type="button" id="test_bat_average" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Avg: {{ player_one.test_bat_average }} </button></td>
 </tr>
 <tr>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Highest Score:{{ messages.player_one }} </button></td>
+<td><button type="button" id="test_highest_score" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Highest Score:{{ player_one.test_highest_score }} </button></td>
 </tr>
 <tr>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 100s:{{ messages.player_one }} </button>  </td>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 50s: {{ messages.player_one }}  </button></td>
+<td><button type="button" id="test_hundreds" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 100s:{{ player_one.test_hundreds }} </button>  </td>
+<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 50s: {{ player_one.test_fifties }}  </button></td>
 </tr>
 <tr>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Wickets: {{ messages.player_one }} </button>  </td>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> BBM: {{ messages.player_one }}/{{ messages.player_one }}  </button></td>
+<td><button type="button" id="test_wickets" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Wickets: {{ player_one.test_wickets }} </button>  </td>
+<td><button type="button" id="test_best_figs" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> BBM: {{ player_one.test_bbm_wkts }}/{{ player_one.test_bbm_runs }}  </button></td>
 </tr>
 <tr>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Economy: {{ messages.player_one }} </button>  </td>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 5W: {{ messages.player_one }} </button></td>
-</tr>
-</tbody>
-</table>
-
-<table class="table right">
-<tbody>
-<tr>
-<td rowspan = 4>  <img src={% static 'images/noimage.jpg' %} style = "padding: 5px" border-radius:20px id="image"> 
-<p align = "center" id="name"> {{ messages.player_one }} </p>
-</td>
-<td><button type="button" id="Matches" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Matches: {{ messages.user_two }} </button> </td>
-</tr>
-<tr>
-<td><button type="button" id="Runs" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Runs: {{ messages.player_one }} </button></td>
-</tr>
-<tr>
-<td><button type="button" id="Avg" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Avg: {{ messages.player_one }} </button></td>
-</tr>
-<tr>
-<td><button type="button" id="Highest" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Highest Score: {{ messages.player_one }} </button></td>
-</tr>
-<tr>
-<td><button type="button" id="100s" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 100s: {{ messages.player_one }} </button>  </td>
-<td><button type="button" id="50s" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 50s: {{ messages.player_one }} </button></td>
-</tr>
-<tr>
-<td><button type="button" id="Wickets" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Wickets: {{ messages.player_one }} </button>  </td>
-<td><button type="button" id="BBM" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> BBM: {{ messages.player_one }}/{{ messages.player_one }} </button></td>
-</tr>
-<tr>
-<td><button type="button" id="Economy" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Economy: {{ messages.player_one }} </button>  </td>
-<td><button type="button" id="5W" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 5W:{{ messages.player_one }} </button></td>
+<td><button type="button" id="test_econ_rate" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Economy: {{ player_one.test_econ_rate }} </button>  </td>
+<td><button type="button" id="test_no_of_five_wickets" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 5W: {{ player_one.test_no_of_five_wickets }} </button></td>
 </tr>
 </tbody>
 </table>
 </div>
-{% endif %}
-
-
 
 {% endblock %}

@@ -3,21 +3,27 @@ import json, random
 import logging
 from channels import Group
 from channels.sessions import channel_session
+from channels.auth import http_session_user, channel_session_user, channel_session_user_from_http
 from Room.models import Gameroom, Message
 from cards_db.models import Tests
 from Room.serializers import Message_Serializer
+from cards_db.serializers import Tests_Serializer
 from django.http import JsonResponse
+
 
 log = logging.getLogger(__name__)
 
 @channel_session
+@channel_session_user_from_http
 def ws_connect(message):
+    
     try:
         game, prefix, label = message['path'].decode('ascii').strip('/').split('/')
-        if prefix != 'tests' or prefix != 'oneday':
-            log.debug('invalid ws path=%s', message['path'])
-            return
-        room = Gameroom.objects.get(label=label)
+	
+	if prefix != 'tests' and prefix != 'oneday':
+           log.debug('invalid ws path=%s', message['path'])
+           return
+	room = Gameroom.objects.get(label=label)
     except ValueError:
         log.debug('invalid ws path=%s', message['path'])
         return
@@ -27,31 +33,38 @@ def ws_connect(message):
 
     log.debug('chat connect room=%s client=%s:%s', room.label, message['client'][0], message['client'][1])
     
-    if prefix == 'tests': 
-    	Group('tests-'+label, channel_layer=message.channel_layer).add(message.reply_channel)
-    if prefix == 'oneday': 
-    	Group('oneday-'+label, channel_layer=message.channel_layer).add(message.reply_channel)
+    Group(prefix+'-'+label, channel_layer=message.channel_layer).add(message.reply_channel)
+
     message.channel_session['room'] = room.label
 
-    game = Message.objects.filter(Gameroom = room)
+    game = Message.objects.get(Gameroom = room)	
 
-    if game.user_two:
-	if game.type_of_game == 'tests': 
-	    player_one = Tests.object.get(id = random.randint(1182,1605))
+    if not game.player_one:
+	if game.user_two is not None and game.type_of_game == 'tests':
+	    player_one = Tests.objects.get(id = random.randint(1182,1605))
 	    player_two = None
 	    while not player_two:
-	    	player_temp = Tests.object.get(id = random.randint(1182,1605))
+	        player_temp = Tests.objects.get(id = random.randint(1182,1605))
 		if player_temp.id !=player_one.id:
-                    player_two = player_temp
-		    
-            game.player_one = player_one.name
-	    game.player_two = player_two.name
- 	    serializer = Message_Serializer(game)
+                   player_two = player_temp
 	    player_one_s = Tests_Serializer(player_one)
 	    player_two_s = Tests_Serializer(player_two)
-	    Group(prefix+'-'+label, channel_layer=message.channel_layer).send({'data': JsonResponse(serializer.data), 'player_one':player_one_s, 'player_two':player_two_s})
-
-
+    	    game.player_one = player_one.name
+	    game.player_two = player_two.name
+	    game.save()
+    else:
+	if game.type_of_game == 'tests':
+	    player_one = Tests.objects.get(name = game.player_one)
+	    player_two = Tests.objects.get(name = game.player_two)
+	    player_one_s = Tests_Serializer(player_one)
+	    player_two_s = Tests_Serializer(player_two)
+	    
+    serializer = Message_Serializer(game)
+    if(game.user_one == message.user.username and game.user_two is not None):
+	Group(prefix+'-'+label, channel_layer=message.channel_layer).send({'text':json.dumps({"message":serializer.data, "player_one":player_one_s.data})})
+	
+    elif(game.user_two == message.user.username and game.user_two is not None):
+	Group(prefix+'-'+label, channel_layer=message.channel_layer).send({'text':json.dumps({"message":serializer.data, "player_one":player_two_s.data})})
 
 
 @channel_session
@@ -68,7 +81,6 @@ def ws_receive(message):
     except Room.DoesNotExist:
         log.debug('recieved message, buy room does not exist label=%s', label)
         return
-
     # Parse out a chat message from the content text, bailing if it doesn't
     # conform to the expected message format.
     try:
@@ -80,12 +92,10 @@ def ws_receive(message):
     if set(data.keys()) != set(('handle', 'message')):
         log.debug("ws message unexpected format data=%s", data)
         return
-
     if data:
         log.debug('chat message room=%s handle=%s message=%s', 
             room.label, data['handle'], data['message'])
         m = room.messages.create(**data)
-
         # See above for the note about Group
         Group('chat-'+label, channel_layer=message.channel_layer).send({'text': json.dumps(m.as_dict())})
     '''
