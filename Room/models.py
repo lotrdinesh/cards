@@ -44,6 +44,47 @@ class Message(models.Model):
     	return "[%s] %s: %s/%s" %(self.timestamp, self.type_of_game, self.user_one, self.user_two)
     
 
+    def compare(self, field):
+	if self.type_of_game == "tests":
+	    player_one =Tests.objects.get(name=self.player_one)
+	    player_two =Tests.objects.get(name=self.player_two)
+	    
+	    if field == "test_econ_rate" :
+		if getattr(player_one, field) < getattr(player_two, field):
+		    self.user_one_score += 1
+		    self.player_one_turn = TRUE
+		elif getattr(player_one, field) > getattr(player_two, field):
+	      	    self.user_two_score += 1
+		    self.player_one_turn = FALSE
+		else:
+		    self.user_one_score +=0.5
+		    self.user_two_score +=0.5
+	    elif field == "test_best_figs" :
+		if getattr(player_one, 'test_bbm_wkts') > getattr(player_two, 'test_bbm_wkts'):
+		    self.user_one_score += 1
+		    self.player_one_turn = TRUE 
+		elif getattr(player_one, 'test_bbm_wkts') < getattr(player_two, 'test_bbm_wkts'):
+	      	    self.user_two_score += 1
+		    self.player_one_turn = FALSE
+		elif getattr(player_one, 'test_bbm_runs') < getattr(player_two, 'test_bbm_runs'):
+		    self.user_one_score +=1
+    		    self.player_one_turn = TRUE
+		elif getattr(player_one, 'test_bbm_runs') > getattr(player_two, 'test_bbm_runs'):
+		    self.user_two_score +=1
+		    self.player_one_turn = FALSE
+		else:
+		    self.user_one_score +=0.5
+		    self.user_two_score +=0.5
+	    else:			
+		if getattr(player_one, field) > getattr(player_two, field):
+		    self.user_one_score += 1
+    		    self.player_one_turn = TRUE  
+		elif getattr(player_one, field) < getattr(player_two, field):
+	      	    self.user_two_score += 1
+    		    self.player_one_turn = TRUE
+		else:
+		    self.user_one_score +=0.5
+		    self.user_two_score +=0.5
 	     
 	
     

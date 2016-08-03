@@ -41,7 +41,7 @@ class Message(models.Model):
     timestamp = models.DateTimeField(default=timezone.now, db_index=True)
     
     def __str__(self):
-    	return '[%s] %s: %s/%s' %(self.timestamp, self.type_of_game, self.user_one, self.user_two
+    	return "[%s] %s: %s/%s" %(self.timestamp, self.type_of_game, self.user_one, self.user_two)
     
 
 	     

@@ -38,7 +38,7 @@ def ws_connect(message):
     message.channel_session['room'] = room.label
 
     game = Message.objects.get(Gameroom = room)	
-
+    
     if not game.player_one:
 	if game.user_two is not None and game.type_of_game == 'tests':
 	    player_one = Tests.objects.get(id = random.randint(1182,1605))
@@ -58,20 +58,15 @@ def ws_connect(message):
 	    player_two = Tests.objects.get(name = game.player_two)
 	    player_one_s = Tests_Serializer(player_one)
 	    player_two_s = Tests_Serializer(player_two)
-	    
+    	    
     serializer = Message_Serializer(game)
-    if(game.user_one == message.user.username and game.user_two is not None):
-	Group(prefix+'-'+label, channel_layer=message.channel_layer).send({'text':json.dumps({"message":serializer.data, "player_one":player_one_s.data})})
+    if game.user_two is not None:
+	Group(prefix+'-'+label, channel_layer=message.channel_layer).send({'text':json.dumps({"message":serializer.data, "player_one":player_one_s.data,"player_two":player_two_s.data})})
 	
-    elif(game.user_two == message.user.username and game.user_two is not None):
-	Group(prefix+'-'+label, channel_layer=message.channel_layer).send({'text':json.dumps({"message":serializer.data, "player_one":player_two_s.data})})
 
 
 @channel_session
 def ws_receive(message):
-    pass
-    # Look up the room from the channel session, bailing if it doesn't exist
-    '''   
     try:
         label = message.channel_session['room']
         room = Room.objects.get(label=label)
@@ -79,7 +74,7 @@ def ws_receive(message):
         log.debug('no room in channel_session')
         return
     except Room.DoesNotExist:
-        log.debug('recieved message, buy room does not exist label=%s', label)
+        log.debug('recieved message, but room does not exist label=%s', label)
         return
     # Parse out a chat message from the content text, bailing if it doesn't
     # conform to the expected message format.
@@ -88,17 +83,17 @@ def ws_receive(message):
     except ValueError:
         log.debug("ws message isn't json text=%s", text)
         return
-    
-    if set(data.keys()) != set(('handle', 'message')):
-        log.debug("ws message unexpected format data=%s", data)
-        return
+        
     if data:
-        log.debug('chat message room=%s handle=%s message=%s', 
-            room.label, data['handle'], data['message'])
-        m = room.messages.create(**data)
-        # See above for the note about Group
-        Group('chat-'+label, channel_layer=message.channel_layer).send({'text': json.dumps(m.as_dict())})
-    '''
+        log.debug('game message room=%s handle=%s field_selected=%s', 
+            room.label, data['handle'], data['id'])
+        m = room.messages.all()[0]
+	m.handle = data['handle']
+	m.compare(data['id']);
+        serializer = Message_Serializer(m)
+        Group(prefix+'-'+label, channel_layer=message.channel_layer).send({'text': json.dumps({"message":serializer.data})})
+
+  
 @channel_session
 def ws_disconnect(message):
     pass

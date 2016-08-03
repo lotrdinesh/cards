@@ -2,14 +2,14 @@ $(function() {
     // When we're using HTTPS, use WSS too.
     var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
     var gamesock = new ReconnectingWebSocket(ws_scheme + '://' + window.location.host + window.location.pathname);
-    
+    console.log("Connection established");
     gamesock.onmessage = function(message) {
 	$('#searchModal').modal('hide');
 	var msg = JSON.parse(message.data);        
 	handle = msg.message.handle;        
 	switch(handle) {
 	case 'start':
-	    console.log(msg.player_one.name);
+	    $.cookie("handle", handle);
 	    $('#player_image').attr("src",decodeURI("images/"+msg.player_one.name+".jpg"));
             $('#player_name').text(msg.player_one.name);
             $('#test_matches').text("Matches: "+msg.player_one.test_matches);
@@ -22,33 +22,32 @@ $(function() {
 	    $('#test_best_figs').text("BBM: "+msg.player_one.test_bbm_wkts+"/"+msg.player_one.test_bbm_runs);
 	    $('#test_econ_rate').text("Econ Rate: "+msg.player_one.test_econ_rate);
   	    $('#test_no_of_five_wickets').text("5W: "+msg.player_one.test_no_of_five_wickets);
-	    break;	
+	    break;
+	case 'active':
+            $.cookie("handle", handle);
+            $('#myModal').modal('show');
+	    console.log(msg);              
+            break;
 	}
-	
+		
     };
 
-    $("#chatform").on("submit", function(event) {
-
-	var message = {
-            handle: $('#handle').val(),
-            message: $('#message').val(),
-        }
-        gamesock.send(JSON.stringify(message));
-        $("#message").val('').focus();
-        return false;
-    });
-
-    $(".btn").on("submit", function(e) {
-
-	e.preventdefault();
+   
+    $(".btn").submit(function(e) {
+        e.preventdefault();
+	console.log("Entering button");
 	var id = $(this).id;
 	var handle = 'active';
-	var message = {
-            handle: $('#handle').val(),
-            message: $('#message').val(),
-        }
-        gamesock.send(JSON.stringify(message));
-        $("#message").val('').focus();
+ //       if(status == "True"){
+   //         var id = $(this).id;
+     //       var handle = 'active';
+       //     var message = {
+         //   	handle: handle,
+           //     id: id,
+            //}
+	console.log(id);
+        //gamesock.send(JSON.stringify(message));
+        //}
         return false;
     });
 
