@@ -61,7 +61,6 @@ def ws_connect(message):
     	    
     serializer = Message_Serializer(game)
     if game.user_two is not None:
-	print serializer.data	
 	Group(prefix+'-'+label, channel_layer=message.channel_layer).send({'text':json.dumps({"message":serializer.data, "player_one":player_one_s.data,"player_two":player_two_s.data})})
 	
 
@@ -70,12 +69,12 @@ def ws_connect(message):
 def ws_receive(message):
     try:
         label = message.channel_session['room']
-        room = Room.objects.get(label=label)
+        room = Gameroom.objects.get(label=label)
     except KeyError:
         log.debug('no room in channel_session')
         return
-    except Room.DoesNotExist:
-        log.debug('recieved message, but room does not exist label=%s', label)
+    except Gameroom.DoesNotExist:
+        log.debug('received message, but room does not exist label=%s', label)
         return
     # Parse out a chat message from the content text, bailing if it doesn't
     # conform to the expected message format.

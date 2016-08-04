@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.utils import timezone
-
+from cards_db.models import Tests, OneDay
 
 # Create your models here.
 
@@ -52,36 +52,36 @@ class Message(models.Model):
 	    if field == "test_econ_rate" :
 		if getattr(player_one, field) < getattr(player_two, field):
 		    self.user_one_score += 1
-		    self.player_one_turn = TRUE
+		    self.player_one_turn = True
 		elif getattr(player_one, field) > getattr(player_two, field):
 	      	    self.user_two_score += 1
-		    self.player_one_turn = FALSE
+		    self.player_one_turn = False
 		else:
 		    self.user_one_score +=0.5
 		    self.user_two_score +=0.5
 	    elif field == "test_best_figs" :
 		if getattr(player_one, 'test_bbm_wkts') > getattr(player_two, 'test_bbm_wkts'):
 		    self.user_one_score += 1
-		    self.player_one_turn = TRUE 
+		    self.player_one_turn = True 
 		elif getattr(player_one, 'test_bbm_wkts') < getattr(player_two, 'test_bbm_wkts'):
 	      	    self.user_two_score += 1
-		    self.player_one_turn = FALSE
+		    self.player_one_turn = False
 		elif getattr(player_one, 'test_bbm_runs') < getattr(player_two, 'test_bbm_runs'):
 		    self.user_one_score +=1
-    		    self.player_one_turn = TRUE
+    		    self.player_one_turn = True
 		elif getattr(player_one, 'test_bbm_runs') > getattr(player_two, 'test_bbm_runs'):
 		    self.user_two_score +=1
-		    self.player_one_turn = FALSE
+		    self.player_one_turn = False
 		else:
 		    self.user_one_score +=0.5
 		    self.user_two_score +=0.5
 	    else:			
 		if getattr(player_one, field) > getattr(player_two, field):
 		    self.user_one_score += 1
-    		    self.player_one_turn = TRUE  
+    		    self.player_one_turn = True  
 		elif getattr(player_one, field) < getattr(player_two, field):
 	      	    self.user_two_score += 1
-    		    self.player_one_turn = TRUE
+    		    self.player_one_turn = True
 		else:
 		    self.user_one_score +=0.5
 		    self.user_two_score +=0.5

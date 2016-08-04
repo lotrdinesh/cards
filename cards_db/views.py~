@@ -33,7 +33,6 @@ def tests_enter(request):
 		record.user_two = request.user.username
 		record.save()
 		room = record.Gameroom
-		print "user_two "+record.user_two
 	    else:
 		room=new_room()                
 		message = Message.objects.create( Gameroom=room, handle ='start', user_one = request.user.username, max_cards = 5, type_of_game = 'tests', player_one_turn=True, player_two_turn=False)    

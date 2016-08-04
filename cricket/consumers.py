@@ -69,12 +69,13 @@ def ws_connect(message):
 def ws_receive(message):
     try:
         label = message.channel_session['room']
-        room = Room.objects.get(label=label)
+        room = Gameroom.objects.get(label=label)
+ 	game, prefix, label_s = message['path'].decode('ascii').strip('/').split('/')
     except KeyError:
         log.debug('no room in channel_session')
         return
-    except Room.DoesNotExist:
-        log.debug('recieved message, but room does not exist label=%s', label)
+    except Gameroom.DoesNotExist:
+        log.debug('received message, but room does not exist label=%s', label)
         return
     # Parse out a chat message from the content text, bailing if it doesn't
     # conform to the expected message format.
