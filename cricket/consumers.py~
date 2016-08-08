@@ -70,6 +70,7 @@ def ws_receive(message):
     try:
         label = message.channel_session['room']
         room = Gameroom.objects.get(label=label)
+ 	game, prefix, label_s = message['path'].decode('ascii').strip('/').split('/')
     except KeyError:
         log.debug('no room in channel_session')
         return
@@ -85,14 +86,29 @@ def ws_receive(message):
         return
         
     if data:
-        log.debug('game message room=%s handle=%s field_selected=%s', 
-            room.label, data['handle'], data['id'])
         m = room.messages.all()[0]
 	m.handle = data['handle']
-	m.compare(data['id']);
-        serializer = Message_Serializer(m)
-        Group(prefix+'-'+label, channel_layer=message.channel_layer).send({'text': json.dumps({"message":serializer.data})})
-
+	m.save()
+	if m.handle == 'active':
+	    m.compare(data['id'])
+            serializer = Message_Serializer(m)
+	    player_one =Tests.objects.get(name=m.player_one)
+	    player_two =Tests.objects.get(name=m.player_two)
+            Group(prefix+'-'+label, channel_layer=message.channel_layer).send({'text': json.dumps({"message":serializer.data, "attr_pl_one" : getattr(player_one, data['id']), "attr_pl_two" : getattr(player_two, data['id']), "id": data['id'] })})
+	if m.handle == 'next':
+	    player_one = Tests.objects.get(id = random.randint(1182,1605))
+	    player_two = None
+	    while not player_two:
+	        player_temp = Tests.objects.get(id = random.randint(1182,1605))
+		if player_temp.id !=player_one.id:
+                   player_two = player_temp
+	    player_one_s = Tests_Serializer(player_one)
+	    player_two_s = Tests_Serializer(player_two)
+    	    m.player_one = player_one.name
+	    m.player_two = player_two.name
+	    m.save()
+  	    serializer = Message_Serializer(m)
+	    Group(prefix+'-'+label, channel_layer=message.channel_layer).send({'text':json.dumps({"message":serializer.data, "player_one":player_one_s.data,"player_two":player_two_s.data})})
   
 @channel_session
 def ws_disconnect(message):

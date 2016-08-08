@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    $('#searchModal').modal(backdrop:'static');
+    $('#searchModal').modal({backdrop:'static'});
     $('#searchModal').modal('show');
 
 });

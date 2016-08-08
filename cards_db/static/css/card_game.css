@@ -1,3 +1,19 @@
+svg {
+   -webkit-transform: rotateZ(-90deg) rotateX(180deg);
+    transform: rotateZ(-90deg) rotateX(180deg);
+}
+
+.circle_animation{
+stroke-dasharray:440;
+stroke-dashoffset: 0;
+}
+
+text{
+ transform: none;
+}
+
+
+
 #clockdiv{
     font-family: sans-serif;
     color: #fff;

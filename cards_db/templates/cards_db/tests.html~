@@ -4,9 +4,6 @@
 
 {% block scripts %}
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-<script src="{%static 'js/card.js' %}"> </script>
-<script src="{%static 'js/deadline.js' %}"> </script>
-<script src="{%static 'js/ajax_submit.js' %}"> </script>
 <script src="{%static 'js/reconnecting-websocket.min.js' %}"> </script>
 <script src="{%static 'js/game.js' %}"> </script>
 <link rel="stylesheet" href="{% static 'css/card_game.css' %}">
@@ -54,10 +51,26 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close " data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Modal Header</h4>
+        <h4 class="modal-title"></h4>
       </div>
-      <div class="modal-body">
-        <p>Some text in the modal.</p>
+      <div id = "result" class="modal-body">
+          <div class = "row">
+    	      <div class="center-block col-sm-5">
+                  <div>
+            	      <img id = "result_win" class = "img-rounded" src= "{% static 'images/noimage.jpg' %}">
+  	          </div>
+              </div>
+              <div class="center-block col-sm-2">
+                  <div>
+                      <span> Beats </span>
+    	          </div>
+    	      </div>
+              <div class="center-block col-sm-5">
+                  <div>
+                      <img id = "result_loss" class = "img-rounded" src = "{% static 'images/noimage.jpg' %}">
+  	          </div>
+              </div>
+          </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -66,20 +79,51 @@
 
   </div>
 </div>
-
-<div id="clockdiv" class="center-block">
-  <div>
-    <span class="seconds"></span>
-    <div class="smalltext">Seconds</div>
-  </div>
+<div class = "container-fluid">
+    <div class = "row">
+	 <div class="center-block col-sm-3">
+      	    <div>
+            	<span id="own_name"></span>
+  	    </div>
+  	</div>
+ 
+        <div class="col-sm-6">
+      	</div>
+        <div class="center-block col-sm-3">
+      	    <div>
+            	<span id="opponent_name"></span>
+    	    </div>
+  	</div>
+    </div>
+    
+    <div class = "row">
+	 <div class="center-block col-sm-3">
+      	    <div>
+            	<span id="own_score"></span>
+  	    </div>
+  	</div>
+ 
+        <div id="clockdiv" class="center-block col-sm-6">
+      	    <div>
+		<svg width = "160" height ="160">
+		    <circle id="circle" class="circle_animation" r="69.85699" cy="81" cx="81" stroke-width="8" stroke="#6fdb6f" fill="none" style = "stroke-dashoffset: 440px;"></circle>
+		    <text class = "seconds" x="50" y="0"></text>
+		</svg>    	    	
+  	    </div>
+  	</div>
+        <div class="center-block col-sm-3">
+      	    <div>
+            	<span id="opponent_score"></span>
+    	    </div>
+  	</div>
+    </div>
 </div>
-
 <div class="wrapper">
 <table class="table left">
 <tbody>
 {% csrf_token %}
 <tr>
-<td rowspan = 4><img id = "player_image" src= {% static player_one.name|get_image%} style = "padding: 5px" border-radius:20px> 
+<td rowspan = 4><img id = "player_image" src= {% static player_one.name|get_image %} style = "padding: 5px" border-radius:20px> 
 <p id = "player_name" align = "center">{{ player_one.name }} </p>
 </td>
 

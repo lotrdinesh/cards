@@ -1,3 +1,19 @@
+svg {
+   -webkit-transform: rotateZ(-90deg) rotateX(180deg);
+    transform: rotateZ(-90deg) rotateX(180deg);
+}
+
+.circle_animation{
+stroke-dasharray:440;
+stroke-dashoffset: 0;
+}
+
+text{
+
+}
+
+
+
 #clockdiv{
     font-family: sans-serif;
     color: #fff;
@@ -39,7 +55,7 @@ table, tbody{
 .table{
 width:40%;
 position: relative;
-top:50px;
+top:70px;
 }
 
 .left{

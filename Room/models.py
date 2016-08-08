@@ -81,11 +81,11 @@ class Message(models.Model):
     		    self.player_one_turn = True  
 		elif getattr(player_one, field) < getattr(player_two, field):
 	      	    self.user_two_score += 1
-    		    self.player_one_turn = True
+    		    self.player_one_turn = False
 		else:
 		    self.user_one_score +=0.5
 		    self.user_two_score +=0.5
-	     
-	
+	    self.player_two_turn = not (self.player_one_turn) 
+	    self.save()	
     
 
