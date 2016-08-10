@@ -104,11 +104,12 @@
   	</div>
  
         <div id="clockdiv" class="center-block col-sm-6">
-      	    <div>
-		<svg width = "160" height ="160">
-		    <circle id="circle" class="circle_animation" r="69.85699" cy="81" cx="81" stroke-width="8" stroke="#6fdb6f" fill="none" style = "stroke-dashoffset: 440px;"></circle>
-		    <text class = "seconds" x="50" y="0"></text>
-		</svg>    	    	
+      	    <div class = "svg radial-progress">
+		<svg height="10em" width="10em">
+      		    <circle class="radial-progress-background" r="3em" cx="5em" cy="5em" fill="transparent" stroke-dasharray="18.849em" stroke-dashoffset="0em"></circle>
+      		    <circle class="radial-progress-cover" r="3em" cx="5em" cy="5em" fill="transparent" stroke-dasharray="18.849em" stroke-dashoffset="0"></circle>
+      		    <circle class="radial-progress-center" r="2.99em" cx="5em" cy="5em" fill="transparent" stroke-dasharray="18.849em" stroke-dashoffset="0em"></circle>
+    		</svg>
   	    </div>
   	</div>
         <div class="center-block col-sm-3">

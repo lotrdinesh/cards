@@ -27,7 +27,7 @@ def ws_connect(message):
     except ValueError:
         log.debug('invalid ws path=%s', message['path'])
         return
-    except Room.DoesNotExist:
+    except Gameroom.DoesNotExist:
         log.debug('ws room does not exist label=%s', label)
         return
 
@@ -75,7 +75,7 @@ def ws_receive(message):
         log.debug('no room in channel_session')
         return
     except Gameroom.DoesNotExist:
-        log.debug('received message, but room does not exist label=%s', label)
+        log.debug('received message, but room does not exist label=%s', label_s)
         return
     # Parse out a chat message from the content text, bailing if it doesn't
     # conform to the expected message format.
@@ -112,12 +112,27 @@ def ws_receive(message):
   
 @channel_session
 def ws_disconnect(message):
-    pass
-'''
+    '''try:
+    data = json.loads(message['text'])
+    except ValueError:
+        log.debug("ws message isn't json text=%s", text)
+        return'''
+    print message['code']
+    print message['reply_channel']
+    print message['order']	
     try:
         label = message.channel_session['room']
-        room = Room.objects.get(label=label)
-        Group('chat-'+label, channel_layer=message.channel_layer).discard(message.reply_channel)
-    except (KeyError, Room.DoesNotExist):
-   pass
-'''
+        room = Gameroom.objects.get(label=label)
+ 	m = room.messages.all()[0]	
+	
+	game, prefix, label_d = message['path'].decode('ascii').strip('/').split('/')
+	if (m.user_one_score+m.user_two_score) == m.max_cards:	
+	    room.delete()
+	    print "Room deleted"
+        Group(prefix+'-'+label, channel_layer=message.channel_layer).discard(message.reply_channel)
+    except (KeyError, Gameroom.DoesNotExist):
+        log.debug('received message, but room does not exist label=%s', label_d)
+        return
+
+
+

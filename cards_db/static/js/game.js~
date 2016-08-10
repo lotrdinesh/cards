@@ -2,6 +2,7 @@ $(function() {
     // When we're using HTTPS, use WSS too.
     var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
     var gamesock = new ReconnectingWebSocket(ws_scheme + '://' + window.location.host + window.location.pathname);
+           
     console.log("Connection established");
     gamesock.onmessage = function(message) {
 	$('#searchModal').modal('hide');
@@ -86,7 +87,7 @@ $(function() {
 	    else{
 	    $('#player_image').attr("src",decodeURI("/static/images/"+msg.player_two.name+".jpg"));
             $('#player_name').text(msg.player_two.name);
-            $('#test_matches').text("Matches: "+msg.player_two.test_matches);
+            $('#test_matches').text("Matches: "+msg.player_two.test_ma9434tches);
 	    $('#test_runs').text("Runs: "+msg.player_two.test_runs);
 	    $('#test_bat_average').text("Avg: "+msg.player_two.test_bat_average);
   	    $('#test_highest_score').text("HS: "+msg.player_two.test_highest_score);
@@ -109,13 +110,26 @@ $(function() {
 	    var deadline = new Date(Date.parse(new Date()) +15*1000);
 	    $.cookie("myClock", deadline)
 	}
+
         $('#clockdiv').initializeClock(deadline);
+	
     };
+
+    gamesock.onclose = function(event){
+	
+    };
+
+    gamesock.onerror = function(event){
+	
+    };
+
+
 
     $(document).ready(function(){
 	$('#searchModal').modal({backdrop:'static'});
     	$('#searchModal').modal('show');
-        
+	
+	   
 	$(".btn-info").on("click",function(e) {
             e.preventDefault();
 	    	
@@ -135,18 +149,17 @@ $(function() {
     	};
 
     	$.fn.initializeClock =function (endtime) {
-    	    var secondsSpan = $('.seconds');
+
   	    $.updateClock = function() {
     	    	var t = $.getTimeRemaining(endtime);
-    	    	if (t.seconds <= 1) {
+		console.log(t.seconds);
+    	    	if (t.seconds <= 0) {
       		clearInterval(timeinterval);
-		secondsSpan.html(0);
-		$('.circle_animation').css('stroke-dashoffset',440);
+		$('.radial-progress-cover').attr('stroke-dashoffset','18.849em');
 		$.removeCookie("myClock");
 	    	}
 	    	else{
-		secondsSpan.html(t.seconds);
-		$('.circle_animation').css('stroke-dashoffset', 440*(1-(t.seconds/15)));
+		$('.radial-progress-cover').attr('stroke-dashoffset', 18.849*(1-(t.seconds/15))+'em');
 	    	}
 	    }
   	    $.updateClock();

@@ -1,16 +1,33 @@
+.svg.radial-progress {
+  position: relative;
+  display: inline-block;
+}
+
+
 svg {
-   -webkit-transform: rotateZ(-90deg) rotateX(180deg);
-    transform: rotateZ(-90deg) rotateX(180deg);
+  transform: rotate(-90deg);
 }
 
-.circle_animation{
-stroke-dasharray:440;
-stroke-dashoffset: 0;
+circle {
+  stroke-width: 2em;
+  fill: transparent;
+  transform: rotate(0.1deg); // to fix Firefox
 }
 
-text{
-
+.radial-progress-background {
+  stroke: orange;
 }
+
+.radial-progress-cover {
+  stroke: #DEDEDE;
+  stroke-width: 2.01em;
+    border: 12px solid red;
+}
+
+.radial-progress-center {
+  fill: #CCC;
+}
+
 
 
 
