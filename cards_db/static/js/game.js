@@ -2,8 +2,7 @@ $(function() {
     // When we're using HTTPS, use WSS too.
     var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
     var gamesock = new ReconnectingWebSocket(ws_scheme + '://' + window.location.host + window.location.pathname);
-           
-    console.log("Connection established");
+    var timeinterval;           
     gamesock.onmessage = function(message) {
 	$('#searchModal').modal('hide');
 	var msg = JSON.parse(message.data);
@@ -62,7 +61,10 @@ $(function() {
 	    $('#result_win').attr("src",encodeURI("/static/images/"+msg.message.player_two+".jpg"));
 	    $('#result_loss').attr("src",encodeURI("/static/images/"+msg.message.player_one+".jpg"));
 	    } 	
+	    $.removeCookie("myClock");
+	    clearInterval(timeinterval);
             $('#myModal').modal('show');
+	    console.log("Entering active");
 	    console.log(msg);              
             break;
 	case 'next':
@@ -83,6 +85,7 @@ $(function() {
 	    $.cookie("status", msg.message.player_one_turn);
 	    $('#own_score').text(msg.message.user_one_score);
 	    $('#opponent_score').text(msg.message.user_two_score);
+	    $.cookie("status", msg.message.player_one_turn);
 	    }
 	    else{
 	    $('#player_image').attr("src",decodeURI("/static/images/"+msg.player_two.name+".jpg"));
@@ -100,14 +103,38 @@ $(function() {
 	    $.cookie("status", msg.message.player_two_turn);
 	    $('#own_score').text(msg.message.user_two_score);
 	    $('#opponent_score').text(msg.message.user_one_score);
-	    } 
+	    $.cookie("status", msg.message.player_two_turn);
+	    }
+	    $.removeCookie("myClock");
+	    clearInterval(timeinterval);
+	    console.log("Entering next");
 	    break;
+	    case 'timeout':
+	    $.cookie("handle", handle);
+	    if (msg.message.player_one_turn == true){
+	    $('#timeout_title').html(msg.message.user_two+" Timed Out!!");
+	    $('#timeout_win').html(msg.message.user_one+" Gets the point!!");
+	    $('#timeout_score').html(msg.message.user_one_score + "-" + msg.message.user_two_score );
+	    }
+	    else{
+	    $('#timeout_title').html(msg.message.user_one+" Timed Out!!");
+	    $('#timeout_win').html(msg.message.user_two+" Gets the point!!");
+	    $('#timeout_score').html(msg.message.user_two_score + "-" + msg.message.user_one_score );
+	    } 	
+            $('#timeOutModal').modal('show');
+	    $.removeCookie("myClock");
+	    clearInterval(timeinterval);
+	    console.log("Entering timeout");
+	    console.log(msg);
+	    break; 
 	}
 	if ($.cookie("myClock")!=null){
 	    var deadline = $.cookie("myClock");	
 	}
 	else{
-	    var deadline = new Date(Date.parse(new Date()) +15*1000);
+	    var deadline = new Date();
+	    deadline.setTime(deadline.getTime() +(30*1000));
+	    console.log(deadline);
 	    $.cookie("myClock", deadline)
 	}
 
@@ -115,12 +142,15 @@ $(function() {
 	
     };
 
-    gamesock.onclose = function(event){
-	
+    gamesock.onclose = function(){
+	if ($.cookie("myClock")!=null){$.removeCookie("myClock");}
+	if ($.cookie("handle")!=null){$.removeCookie("handle");}
+	if ($.cookie("label")!=null){$.removeCookie("label");}
+	if ($.cookie("username")!=null){$.removeCookie("username");}
     };
 
     gamesock.onerror = function(event){
-	
+	alert(event.data);
     };
 
 
@@ -132,8 +162,8 @@ $(function() {
 	   
 	$(".btn-info").on("click",function(e) {
             e.preventDefault();
-	    	
-            if($.cookie("status" == true)){
+	    console.log($.cookie("status"));	
+            if($.cookie("status") == "true"){
                 var id = this.id;
                 var handle = 'active';
                 var message = {handle: handle,id: id}
@@ -153,17 +183,24 @@ $(function() {
   	    $.updateClock = function() {
     	    	var t = $.getTimeRemaining(endtime);
 		console.log(t.seconds);
-    	    	if (t.seconds <= 0) {
-      		clearInterval(timeinterval);
-		$('.radial-progress-cover').attr('stroke-dashoffset','0em');
-		$.removeCookie("myClock");
+
+		if (t.seconds < 0) {
+		    console.log("Timed Out!!");
+		    clearInterval(timeinterval);
+		    $('.radial-progress-cover').attr('stroke-dashoffset','0em');
+		    $.removeCookie("myClock");
+		    if ($.cookie("status") == "true"){
+		        var handle = 'timeout';
+                        var message = {handle: handle};
+            	        gamesock.send(JSON.stringify(message));
+		    }
 	    	}
 	    	else{
-		$('.radial-progress-cover').attr('stroke-dashoffset', 18.849*(t.seconds/15)+'em');
+		    $('.radial-progress-cover').attr('stroke-dashoffset', 9.4245*(t.seconds/30)+'em');
 	    	}
 	    }
   	    $.updateClock();
-  	    var timeinterval = setInterval($.updateClock, 1000);
+  	    timeinterval = setInterval($.updateClock, 1000);
         };
 
     });
@@ -174,13 +211,30 @@ $(function() {
             clearTimeout(myModal.data('hideInterval'));
             myModal.data('hideInterval', setTimeout(function(){myModal.modal('hide');}, 2000));
         });
+
+	$('#timeOutModal').on('show.bs.modal', function(){
+    	    var myModal = $(this);
+            clearTimeout(myModal.data('hideInterval'));
+            myModal.data('hideInterval', setTimeout(function(){myModal.modal('hide');}, 30000));
+        });
     });
 
     $(function(){
     	$('#myModal').on('hide.bs.modal', function(){
-    	    var handle = 'next';     
-	    var message = {handle: handle}
+	    
+    	    if($.cookie("status") == "true"){
+	    var handle = 'next';     
+	    var message = {handle: handle};
             gamesock.send(JSON.stringify(message));
+	    }
+        });
+    	$('#timeOutModal').on('hide.bs.modal', function(){
+	    
+    	    if($.cookie("status") == "true"){
+	    var handle = 'next';     
+	    var message = {handle: handle};
+            gamesock.send(JSON.stringify(message));
+	    }
         });
     });
 });

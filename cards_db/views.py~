@@ -65,6 +65,7 @@ def tests(request, label):
     print room.label
     response = render(request, "cards_db/tests.html", {'room': room, 'messages':messages,})
     response.set_cookie('label', room.label)
+    response.set_cookie('username', request.user.username)
     return response
   
 

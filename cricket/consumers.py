@@ -90,12 +90,14 @@ def ws_receive(message):
 	m.handle = data['handle']
 	m.save()
 	if m.handle == 'active':
+	    print "active"
 	    m.compare(data['id'])
             serializer = Message_Serializer(m)
 	    player_one =Tests.objects.get(name=m.player_one)
 	    player_two =Tests.objects.get(name=m.player_two)
             Group(prefix+'-'+label, channel_layer=message.channel_layer).send({'text': json.dumps({"message":serializer.data, "attr_pl_one" : getattr(player_one, data['id']), "attr_pl_two" : getattr(player_two, data['id']), "id": data['id'] })})
 	if m.handle == 'next':
+	    print "next"
 	    player_one = Tests.objects.get(id = random.randint(1182,1605))
 	    player_two = None
 	    while not player_two:
@@ -109,7 +111,12 @@ def ws_receive(message):
 	    m.save()
   	    serializer = Message_Serializer(m)
 	    Group(prefix+'-'+label, channel_layer=message.channel_layer).send({'text':json.dumps({"message":serializer.data, "player_one":player_one_s.data,"player_two":player_two_s.data})})
-  
+  	if m.handle == 'timeout':
+	    print "timeout"
+	    m.timeout()
+	    serializer = Message_Serializer(m)
+	    Group(prefix+'-'+label, channel_layer=message.channel_layer).send({'text': json.dumps({"message":serializer.data})})
+	
 @channel_session
 def ws_disconnect(message):
      

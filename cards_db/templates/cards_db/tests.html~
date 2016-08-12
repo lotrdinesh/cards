@@ -42,6 +42,31 @@
   </div>
 </div>
 
+<div id="timeOutModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close " data-dismiss="modal">&times;</button>
+        <h4 class="modal-title"></h4>
+      </div>
+      <div id = "result_timeout" class="modal-body">
+          <div class = "row">
+    	      <div class="center-block col-sm-6">
+                  <div id="timout_win"></div>
+              </div>
+              <div class="center-block col-sm-6">
+                  <div id="timeout_score"></div>
+    	      </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
 
 
 <!-- Modal -->
@@ -105,10 +130,11 @@
  
         <div id="clockdiv" class="center-block col-sm-6">
       	    <div class = "svg radial-progress">
-		<svg height="10em" width="10em">
-      		    <circle class="radial-progress-background" r="3em" cx="5em" cy="5em" fill="transparent" stroke-dasharray="18.849em" stroke-dashoffset="0em"></circle>
-      		    <circle class="radial-progress-cover" r="3em" cx="5em" cy="5em" fill="transparent" stroke-dasharray="18.849em" stroke-dashoffset="0"></circle>
-      		    <circle class="radial-progress-center" r="2.99em" cx="5em" cy="5em" fill="transparent" stroke-dasharray="18.849em" stroke-dashoffset="0em"></circle>
+		<svg height="5em" width="5em">
+      		    <circle class="radial-progress-background" r="1.5em" cx="2.5em" cy="2.5em" fill="transparent" stroke-dasharray="9.4245em" stroke-dashoffset="0em"></circle>
+      		    <circle class="radial-progress-cover" r="1.5em" cx="2.5em" cy="2.5em" fill="transparent" stroke-dasharray="9.4245em" stroke-dashoffset="0em"></circle>
+      		    <circle class="radial-progress-center" r="1.49em" cx="2.5em" cy="2.5em" fill="transparent" stroke-dasharray="9.4245em" stroke-dashoffset="9.4245em"></circle>
+		    <text class="seconds" x="2em" y="3em"></text>
     		</svg>
   	    </div>
   	</div>

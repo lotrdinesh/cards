@@ -88,4 +88,13 @@ class Message(models.Model):
 	    self.player_two_turn = not (self.player_one_turn) 
 	    self.save()	
     
+    def timeout(self):
+	if self.player_one_turn == True:
+		self.user_two_score += 1
+		self.player_one_turn = False
+	else:
+	      	self.user_one_score += 1
+		self.player_one_turn = True
+	self.player_two_turn = not (self.player_one_turn) 
+	self.save()	
 

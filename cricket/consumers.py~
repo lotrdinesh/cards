@@ -109,17 +109,14 @@ def ws_receive(message):
 	    m.save()
   	    serializer = Message_Serializer(m)
 	    Group(prefix+'-'+label, channel_layer=message.channel_layer).send({'text':json.dumps({"message":serializer.data, "player_one":player_one_s.data,"player_two":player_two_s.data})})
-  
+  	if m.handle == 'timeout':
+	    m.timeout()
+	    serializer = Message_Serializer(m)
+	    Group(prefix+'-'+label, channel_layer=message.channel_layer).send({'text': json.dumps({"message":serializer.data})})
+	
 @channel_session
 def ws_disconnect(message):
-    '''try:
-    data = json.loads(message['text'])
-    except ValueError:
-        log.debug("ws message isn't json text=%s", text)
-        return'''
-    print message['code']
-    print message['reply_channel']
-    print message['order']	
+     
     try:
         label = message.channel_session['room']
         room = Gameroom.objects.get(label=label)

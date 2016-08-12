@@ -107,3 +107,4 @@ def new_room():
 	
     new_room.name = 'Room-' + str(Gameroom.objects.get(label = label).id)
     return new_room
+
