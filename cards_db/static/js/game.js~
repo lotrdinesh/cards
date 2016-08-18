@@ -3,6 +3,7 @@ $(function() {
     var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
     var gamesock = new ReconnectingWebSocket(ws_scheme + '://' + window.location.host + window.location.pathname);
     var timeinterval;           
+    var time = 15;
     gamesock.onmessage = function(message) {
 	$('#searchModal').modal('hide');
 	var msg = JSON.parse(message.data);
@@ -47,7 +48,8 @@ $(function() {
 	    $('#own_score').text(msg.message.user_two_score);
 	    $('#opponent_score').text(msg.message.user_one_score);
 	    $.cookie("status", msg.message.player_two_turn);
-	    } 
+	    }
+	    console.log(msg); 
 	    break;
 	case 'active':
             $.cookie("handle", handle);
@@ -64,20 +66,19 @@ $(function() {
 	    $.removeCookie("myClock");
 	    clearInterval(timeinterval);
             $('#myModal').modal('show');
-	    console.log("Entering active");
-	    console.log(msg);              
-            break;
+	    break;
 	case 'next':
 	    $.cookie("handle", handle);
 	    if (msg.message.user_one == $.cookie("username")){
 	    $('#player_image').attr("src","/static/images/"+msg.player_one.name+".jpg");
             $('#player_name').text(msg.player_one.name);
-            $('#test_matches').text("Matches: "+msg.player_one.test_matches);
+	    $('#test_matches').text("Matches: "+msg.player_one.test_matches);
 	    $('#test_runs').text("Runs: "+msg.player_one.test_runs);
 	    $('#test_bat_average').text("Avg: "+msg.player_one.test_bat_average);
   	    $('#test_highest_score').text("HS: "+msg.player_one.test_highest_score);
 	    $('#test_hundreds').text("100s: "+msg.player_one.test_hundreds);
-	    $('#test_fifties').text("50s: "+msg.player_one.test_fifties);
+	    console.log(msg.player_one.test_fifties);
+            $('#test_fifties').text("50s: "+msg.player_one.test_fifties);
   	    $('#test_wickets').text("Wkts: "+msg.player_one.test_wickets);
 	    $('#test_best_figs').text("BBM: "+msg.player_one.test_bbm_wkts+"/"+msg.player_one.test_bbm_runs);
 	    $('#test_econ_rate').text("Econ Rate: "+msg.player_one.test_econ_rate);
@@ -90,12 +91,13 @@ $(function() {
 	    else{
 	    $('#player_image').attr("src",decodeURI("/static/images/"+msg.player_two.name+".jpg"));
             $('#player_name').text(msg.player_two.name);
-            $('#test_matches').text("Matches: "+msg.player_two.test_ma9434tches);
+            $('#test_matches').text("Matches: "+msg.player_two.test_matches);
 	    $('#test_runs').text("Runs: "+msg.player_two.test_runs);
 	    $('#test_bat_average').text("Avg: "+msg.player_two.test_bat_average);
   	    $('#test_highest_score').text("HS: "+msg.player_two.test_highest_score);
 	    $('#test_hundreds').text("100s: "+msg.player_two.test_hundreds);
-	    $('#test_fifties').text("50s: "+msg.player_two.test_fifties);
+	    console.log(msg.player_two.test_fifties);
+            $('#test_fifties').text("50s: "+msg.player_two.test_fifties);
   	    $('#test_wickets').text("Wkts: "+msg.player_two.test_wickets);
 	    $('#test_best_figs').text("BBM: "+msg.player_two.test_bbm_wkts+"/"+msg.player_one.test_bbm_runs);
 	    $('#test_econ_rate').text("Econ Rate: "+msg.player_two.test_econ_rate);
@@ -107,11 +109,10 @@ $(function() {
 	    }
 	    $.removeCookie("myClock");
 	    clearInterval(timeinterval);
-	    console.log("Entering next");
+	    console.log(msg); 
 	    break;
 	    case 'timeout':
 	    $.cookie("handle", handle);
-	    console.log(msg.message.user_one+":"+msg.message.user_one_score+"-"+msg.message.user_two+":"+msg.message.user_two_score);
 	    if (msg.message.player_one_turn == true){
 	    $('#timeout_title').html(msg.message.user_two+" Timed Out!!");
 	    $('#timeout_win').html(msg.message.user_one+" Gets the point!!");
@@ -134,8 +135,7 @@ $(function() {
 	}
 	else{
 	    var deadline = new Date();
-	    deadline.setTime(deadline.getTime() +(30*1000));
-	    console.log(deadline);
+	    deadline.setTime(deadline.getTime() +(time*1000));
 	    $.cookie("myClock", deadline)
 	}
 
@@ -183,8 +183,7 @@ $(function() {
 
   	    $.updateClock = function() {
     	    	var t = $.getTimeRemaining(endtime);
-		console.log(t.seconds);
-
+		
 		if (t.seconds < 0) {
 		    console.log("Timed Out!!");
 		    clearInterval(timeinterval);
@@ -197,7 +196,7 @@ $(function() {
 		    }
 	    	}
 	    	else{
-		    $('.radial-progress-cover').attr('stroke-dashoffset', 9.4245*(t.seconds/30)+'em');
+		    $('.radial-progress-cover').attr('stroke-dashoffset', 9.4245*(t.seconds/time)+'em');
 	    	}
 	    }
   	    $.updateClock();
@@ -216,7 +215,7 @@ $(function() {
 	$('#timeOutModal').on('show.bs.modal', function(){
     	    var myModal = $(this);
             clearTimeout(myModal.data('hideInterval'));
-            myModal.data('hideInterval', setTimeout(function(){myModal.modal('hide');}, 30000));
+            myModal.data('hideInterval', setTimeout(function(){myModal.modal('hide');}, 5000));
         });
     });
 

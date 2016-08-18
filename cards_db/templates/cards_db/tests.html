@@ -21,8 +21,6 @@
 
 {% block content %}
 
-
-
 <div id="searchModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
@@ -104,6 +102,9 @@
 
   </div>
 </div>
+
+<!--Main body of the page-->
+
 <div class = "container-fluid">
     <div class = "row">
 	 <div class="center-block col-sm-3">
@@ -131,10 +132,10 @@
         <div id="clockdiv" class="center-block col-sm-6">
       	    <div class = "svg radial-progress">
 		<svg height="5em" width="5em">
-      		    <circle class="radial-progress-background" r="1.5em" cx="2.5em" cy="2.5em" fill="transparent" stroke-dasharray="9.4245em" stroke-dashoffset="0em"></circle>
-      		    <circle class="radial-progress-cover" r="1.5em" cx="2.5em" cy="2.5em" fill="transparent" stroke-dasharray="9.4245em" stroke-dashoffset="0em"></circle>
-      		    <circle class="radial-progress-center" r="1.49em" cx="2.5em" cy="2.5em" fill="transparent" stroke-dasharray="9.4245em" stroke-dashoffset="9.4245em"></circle>
-		    <text class="seconds" x="2em" y="3em"></text>
+      		    <circle class="radial-progress-background" r="1.5em" cx="2.5em" cy="2.5em" fill="transparent" stroke-dasharray="9.4285em" stroke-dashoffset="0em"></circle>
+      		    <circle class="radial-progress-cover" r="1.5em" cx="2.5em" cy="2.5em" fill="transparent" stroke-dasharray="9.4285em" stroke-dashoffset="9.4285em"></circle>
+      		    <circle class="radial-progress-center" r="1.49em" cx="2.5em" cy="2.5em" fill="transparent" stroke-dasharray="9.4285em" stroke-dashoffset="9.4285em"></circle>
+		    <text class="seconds" x="2em" y="3em" transform= "rotate(90 90 60) translate(32 -6)"></text>
     		</svg>
   	    </div>
   	</div>
@@ -144,41 +145,64 @@
     	    </div>
   	</div>
     </div>
-</div>
-<div class="wrapper">
-<table class="table left">
-<tbody>
-{% csrf_token %}
-<tr>
-<td rowspan = 4><img id = "player_image" src= {% static player_one.name|get_image %} style = "padding: 5px" border-radius:20px> 
-<p id = "player_name" align = "center">{{ player_one.name }} </p>
-</td>
 
-<td><button type="button" id="test_matches" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Matches: {{ player_one.test_matches }} </button> </td>
-</tr>
-<tr>
-<td><button type="button" id="test_runs" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Runs: {{ player_one.test_runs }} </button></td>
-</tr>
-<tr>
-<td><button type="button" id="test_bat_average" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Avg: {{ player_one.test_bat_average }} </button></td>
-</tr>
-<tr>
-<td><button type="button" id="test_highest_score" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Highest Score:{{ player_one.test_highest_score }} </button></td>
-</tr>
-<tr>
-<td><button type="button" id="test_hundreds" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 100s:{{ player_one.test_hundreds }} </button>  </td>
-<td><button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 50s: {{ player_one.test_fifties }}  </button></td>
-</tr>
-<tr>
-<td><button type="button" id="test_wickets" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Wickets: {{ player_one.test_wickets }} </button>  </td>
-<td><button type="button" id="test_best_figs" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> BBM: {{ player_one.test_bbm_wkts }}/{{ player_one.test_bbm_runs }}  </button></td>
-</tr>
-<tr>
-<td><button type="button" id="test_econ_rate" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> Economy: {{ player_one.test_econ_rate }} </button>  </td>
-<td><button type="button" id="test_no_of_five_wickets" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal"> 5W: {{ player_one.test_no_of_five_wickets }} </button></td>
-</tr>
-</tbody>
-</table>
+
+    <div class = "row">
+	 <div class="center-block col-sm-3">
+            	  	    
+  	</div>
+
+        <div class="center-block col-sm-6 tables">
+      	    <div class="row">
+	        <div class="center-block col-sm-6">	
+		{% csrf_token %}
+		<img id = "player_image" src= {% static player_one.name|get_image %} style = "padding: 5px" border-radius:20px> 
+		<p id = "player_name" align = "center">{{ player_one.name }} </p>
+		</div>
+		<div class="center-block col-sm-6">
+		    <div class="row margin_set">
+			<button type="button" id="test_matches" class="btn btn-info btn-lg center-block" data-toggle="modal" data-target="#myModal"> Matches: {{ player_one.test_matches }} </button> 
+		    </div>
+		    <div class="row margin_set">
+			<button type="button" id="test_runs" class="btn btn-info btn-lg center-block" data-toggle="modal" data-target="#myModal"> Runs: {{ player_one.test_runs }} </button>
+		    </div>
+		    <div class="row margin_set">
+			<button type="button" id="test_bat_average" class="btn btn-info btn-lg center-block" data-toggle="modal" data-target="#myModal"> Avg: {{ player_one.test_bat_average }} </button>
+		    </div>
+		    <div class="row margin_set">
+			<button type="button" id="test_highest_score" class="btn btn-info btn-lg center-block" data-toggle="modal" data-target="#myModal"> Highest Score:{{ player_one.test_highest_score }} </button>
+		    </div>
+	  	</div>
+	    </div>
+	    <div class="row margin_set">
+	  	<div class="center-block col-sm-6">	
+	  	    <button type="button" id="test_hundreds" class="btn btn-info btn-lg center-block" data-toggle="modal" data-target="#myModal"> 100s:{{ player_one.test_hundreds }} </button>
+		</div>
+		<div class="center-block col-sm-6">
+		    <button type="button" id="test_fifties" class="btn btn-info btn-lg center-block" data-toggle="modal" data-target="#myModal"> 50s: {{ player_one.test_fifties }}  </button>
+		</div>
+	    </div>
+	    <div class="row margin_set">
+	        <div class="center-block col-sm-6">
+		    <button type="button" id="test_wickets" class="btn btn-info btn-lg center-block" data-toggle="modal" data-target="#myModal"> Wickets: {{ player_one.test_wickets }} </button>
+		</div>
+	        <div class="center-block col-sm-6">
+		    <button type="button" id="test_best_figs" class="btn btn-info btn-lg center-block" data-toggle="modal" data-target="#myModal"> BBM: {{ player_one.test_bbm_wkts }}/{{ player_one.test_bbm_runs }}  </button>
+		</div>
+	    </div>
+	    <div class="row margin_set">
+		<div class="center-block col-sm-6">
+		    <button type="button" id="test_econ_rate" class="btn btn-info btn-lg center-block" data-toggle="modal" data-target="#myModal"> Economy: {{ player_one.test_econ_rate }} </button>  
+		</div>
+		<div class="center-block col-sm-6">
+		    <button type="button" id="test_no_of_five_wickets" class="btn btn-info btn-lg center-block" data-toggle="modal" data-target="#myModal"> 5W: {{ player_one.test_no_of_five_wickets }} </button>
+		</div>
+	    </div>
+	</div>
+        <div class="center-block col-sm-3">
+ 
+   	</div>
+    </div>
 </div>
 
 {% endblock %}

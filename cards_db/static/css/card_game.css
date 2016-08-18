@@ -61,18 +61,11 @@ circle {
 
 
 
-table, tbody{
+.tables{
     border: 1px solid black;
     border-radius : 20px;
-    border-collapse: separate;
-    webkit-border-radius : 20px; 
-
-}
-
-.table{
-width:40%;
-position: relative;
-top:70px;
+    position: relative;
+    top:70px;    
 }
 
 .left{
@@ -89,6 +82,11 @@ display:inline;
 
 .modal{
 text-align: center;
+}
+
+.margin_set{
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 
